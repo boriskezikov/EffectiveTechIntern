@@ -13,6 +13,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+                  <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openFile" text="Open As" />
                   <MenuItem fx:id="newFileMenuItem" mnemonicParsing="false" onAction="#createFile" text="New" />
                   <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveFile" text=" Save as" />
             </items>
@@ -29,9 +30,6 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TextArea layoutX="136.0" layoutY="132.0" prefHeight="200.0" prefWidth="230.0"
-        AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-        AnchorPane.topAnchor="30.0"
-      fx:id="textEditor"/>
+      <TextArea fx:id="textEditor" layoutX="136.0" layoutY="132.0" prefHeight="200.0" prefWidth="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
    </children>
 </AnchorPane>
