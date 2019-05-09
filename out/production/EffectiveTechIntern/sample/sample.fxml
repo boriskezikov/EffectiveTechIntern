@@ -5,7 +5,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="651.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
@@ -15,7 +17,7 @@
             <items>
                   <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openFile" text="Open As" />
                   <MenuItem fx:id="newFileMenuItem" mnemonicParsing="false" onAction="#createFile" text="New" />
-                  <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveFile" text=" Save as" />
+                  <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveFile" text="Save as" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -25,11 +27,16 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="Visit Manual" />
+              <MenuItem mnemonicParsing="false" text="Visit Manual"  fx:id="helpItem" onAction="#openLink" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <TextArea fx:id="textEditor" layoutX="136.0" layoutY="132.0" prefHeight="200.0" prefWidth="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+      <TextArea fx:id="textEditor" layoutX="136.0" layoutY="132.0" prefHeight="365.0" prefWidth="651.0" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+      <TextField fx:id="console" alignment="TOP_LEFT" disable="true" layoutX="30.0" layoutY="409.0" onAction="#consoleLog" opacity="0.81" prefHeight="63.0" prefWidth="591.0" text="Console log for testing =) " AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="420.0">
+         <font>
+            <Font name="System Bold" size="11.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>
