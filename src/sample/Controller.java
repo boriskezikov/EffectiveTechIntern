@@ -11,10 +11,6 @@ import java.util.Scanner;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 
 
@@ -84,20 +80,6 @@ public class Controller implements Initializable {
         }
     }
 
-    static boolean testIdentity() {
-
-        return true ;//openedPath.toFile().lastModified() == ;
-    }
-
-    public void testIdentity(KeyEvent event)
-    {
-        final KeyCombination kb = new KeyCodeCombination(KeyCode.TAB, KeyCombination.CONTROL_DOWN);
-
-        if (kb.match(event))
-        {
-           saveAsFile();
-        }
-    }
     public void openLink() {
         textEditor.setText("╔══╗╔══╦══╦╗╔╦╗╔╗\n"
                                + "╚═╗║║╔═╣╔╗║║║║║║║\n"
