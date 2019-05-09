@@ -36,11 +36,9 @@ public class Controller implements Initializable {
     @FXML
     private MenuItem saveMenuItem;
 
-    @FXML
-    private HTMLEditor textEditor;
 
     @FXML
-    private TextArea testText;
+    private TextArea textEditor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -61,30 +59,11 @@ public class Controller implements Initializable {
         System.out.println(path);
         FileWriter fos = new FileWriter(
             new File(path, "name.txt"));
-        fos.write(textEditor.getHtmlText());
+        fos.write(textEditor.getText());
         fos.close();
     }
 
-    private static String getText(String htmlText) {
 
-        String result = "";
-
-        Pattern pattern = Pattern.compile("<[^>]*>");
-        Matcher matcher = pattern.matcher(htmlText);
-        final StringBuffer text = new StringBuffer(htmlText.length());
-
-        while (matcher.find()) {
-            matcher.appendReplacement(
-                text,
-                " ");
-        }
-
-        matcher.appendTail(text);
-
-        result = text.toString().trim();
-
-        return result;
-    }
     private static boolean isWindows() {
         String os = System.getProperty("os.name").toLowerCase();
         return (os.contains("win"));
@@ -102,16 +81,3 @@ public class Controller implements Initializable {
 
 }
 
-//{Label secondLabel = new Label("I'm a Label on new Window");
-//    StackPane secondaryLayout = new StackPane();
-//        secondaryLayout.getChildren().add(secondLabel);
-//                Scene secondScene = new Scene(secondaryLayout, 230, 100);
-//
-//                // New window (Stage)
-//                Stage newWindow = new Stage();
-//                newWindow.setTitle("Second Stage");
-//                newWindow.setScene(secondScene);
-//
-//                // Set position of second window, related to primary window.
-//
-//                newWindow.show();}
