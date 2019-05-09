@@ -7,30 +7,32 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
+
 
 public class Controller implements Initializable {
 
     private final FileChooser fileChooser = new FileChooser();
 
-    private Path openedPath;
+    private static Path openedPath;
 
     @FXML
     private TextArea textEditor;
-
-    @FXML
-    private TextArea console;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
     public void createFile() {
-        console.setText("\nFile created: ");
+        System.out.println("\nFile created: ");
     }
 
     public void openFile() {
@@ -45,18 +47,18 @@ public class Controller implements Initializable {
                     String line = s.nextLine();
                     textEditor.appendText(line + "\n");
                 }
-                console.setText("\nFile opened: " + file.getAbsolutePath());
+                System.out.println("\nFile opened: " + file.getAbsolutePath());
             }
 
         } catch (IOException ex) {
-            console.setText("Uuups! Something goes wrong! " + ex.getMessage());
+            System.out.println("Uuups! Something goes wrong! " + ex.getMessage());
         }
     }
 
     public void saveFile() throws IOException {
         if (openedPath != null) {
             Files.write(openedPath, textEditor.getText().getBytes());
-            console.setText("File saved");
+            System.out.println("File saved");
         }
         else{
             saveAsFile();
@@ -72,21 +74,31 @@ public class Controller implements Initializable {
                 }
                 openedPath = file.toPath();
                 Files.write(openedPath, textEditor.getText().getBytes());
-                console.setText("\nFile saved at path: " + file.getAbsolutePath());
+                System.out.println("\nFile saved at path: " + file.getAbsolutePath());
                 return;
             }
-            console.setText("\nFile save procedure has been aborted.");
+            System.out.println("\nFile save procedure has been aborted.");
 
         } catch (IOException ex) {
-            console.setText("Uuups! Something goes wrong! " + ex.getMessage());
+            System.out.println("Uuups! Something goes wrong! " + ex.getMessage());
         }
     }
 
-    private boolean testIdentity(File freshFile, File oldFile) {
-        return freshFile.equals(oldFile);
+    static boolean testIdentity() {
+
+        return true ;//openedPath.toFile().lastModified() == ;
     }
 
-    public void openLink(ActionEvent actionEvent) {
+    public void testIdentity(KeyEvent event)
+    {
+        final KeyCombination kb = new KeyCodeCombination(KeyCode.TAB, KeyCombination.CONTROL_DOWN);
+
+        if (kb.match(event))
+        {
+           saveAsFile();
+        }
+    }
+    public void openLink() {
         textEditor.setText("╔══╗╔══╦══╦╗╔╦╗╔╗\n"
                                + "╚═╗║║╔═╣╔╗║║║║║║║\n"
                                + "──║╚╝║─║║║║╚╝║╚╝║\n"
