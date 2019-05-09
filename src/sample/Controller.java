@@ -1,117 +1,133 @@
 package sample;
 
-
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import java.util.Scanner;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Skin;
-import javafx.scene.control.SkinBase;
-import javafx.scene.control.Skinnable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.web.HTMLEditor;
+import javafx.stage.FileChooser;
+
+
 
 public class Controller implements Initializable {
 
-    @FXML
-    private Button myButton;
+    private final FileChooser fileChooser = new FileChooser();
+
+    /** @value openedPath is a variable stores current work directory.(Opened file)*/
+    private  Path openedPath;
 
     @FXML
-    private MenuItem newFileMenuItem;
-
-    @FXML
-    private MenuItem openFileMenuItem;
-
-    @FXML
-    private MenuItem saveMenuItem;
-
-    @FXML
-    private HTMLEditor textEditor;
-
-    @FXML
-    private TextArea testText;
+    private TextArea textEditor= new TextArea();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public void createFile(ActionEvent actionEvent) {
-        System.out.println("kfkfkfkf");
+    /** Function which creates a new file */
+    public void createFile() {
+
+        /** @param alert Requests user confirmation to save file or not.*/
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+
+        alert.setTitle("Confirm action");
+        alert.setHeaderText("Do you want to save this document before closing?");
+        alert.setContentText(null);
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {
+                saveFile();}
+            openedPath = new File("new.txt").toPath();
+            setTitle();
+        });
 
     }
 
-    public void openFile(ActionEvent actionEvent) {
-        System.out.println("File { } opened");
-    }
-
-    public void saveFile(ActionEvent actionEvent) throws IOException {
-        System.out.println(textEditor.getSkin());
-        String path = System.getProperty("user.dir");
-        System.out.println(path);
-        FileWriter fos = new FileWriter(
-            new File(path, "name.txt"));
-        fos.write(textEditor.getHtmlText());
-        fos.close();
-    }
-
-    private static String getText(String htmlText) {
-
-        String result = "";
-
-        Pattern pattern = Pattern.compile("<[^>]*>");
-        Matcher matcher = pattern.matcher(htmlText);
-        final StringBuffer text = new StringBuffer(htmlText.length());
-
-        while (matcher.find()) {
-            matcher.appendReplacement(
-                text,
-                " ");
+    public void openFile() {
+        try {
+            /** @param file  - Open dialog to choose any file*/
+            File file = fileChooser.showOpenDialog(Main.getPrimaryStage());
+            if (file != null) {
+                openedPath = file.toPath();
+                Scanner s = new Scanner(file);
+                while (s.hasNext()) {
+                    String line = s.nextLine();
+                    textEditor.appendText(line + "\n");
+                }
+                System.out.println("\nFile opened: " + file.getAbsolutePath());
+            }
+            setTitle();
+        } catch (IOException ex) {
+            System.out.println("Uuups! Something goes wrong in 'openFile'! " + ex.getMessage());
         }
-
-        matcher.appendTail(text);
-
-        result = text.toString().trim();
-
-        return result;
-    }
-    private static boolean isWindows() {
-        String os = System.getProperty("os.name").toLowerCase();
-        return (os.contains("win"));
     }
 
-    private static boolean isMac() {
-        String os = System.getProperty("os.name").toLowerCase();
-        return (os.contains("mac"));
+    public void saveFile() {
+        try {
+            if (openedPath != null) {
+                Files.write(openedPath, textEditor.getText().getBytes());
+                System.out.println("File saved");
+            } else {
+                saveAsFile();
+            }
+            setTitle();
+
+        } catch (IOException ex) {
+            System.out.println("Uuups! Something goes wrong while saving file! " + ex.getMessage());
+        }
     }
 
-    private static boolean isUnix() {
-        String os = System.getProperty("os.name").toLowerCase();
-        return (os.contains("nix") || os.contains("nux"));
+    public void saveAsFile() {
+        try {
+            File file = fileChooser.showSaveDialog(Main.getPrimaryStage());
+            if (file != null) {
+                if (!file.getName().contains(".") || file.getName().indexOf(".") != -1) {
+                    file = new File(file.getName().replace(".", "") + ".txt");
+                }
+                openedPath = file.toPath();
+                Files.write(openedPath, textEditor.getText().getBytes());
+                System.out.println("\nFile saved at path: " + file.getAbsolutePath());
+                setTitle();
+                return;
+            }
+            System.out.println("\nFile save procedure has been aborted. SAVE AS");
+        } catch (IOException ex) {
+            System.out.println("Uuups! Something goes wrong saving AS! " + ex.getMessage());
+        }
     }
+
+    public void openLink() {
+        textEditor.setText("╔══╗╔══╦══╦╗╔╦╗╔╗\n"
+                               + "╚═╗║║╔═╣╔╗║║║║║║║\n"
+                               + "──║╚╝║─║║║║╚╝║╚╝║\n"
+                               + "──║╔╗║─║║║╠═╗╠═╗║\n"
+                               + "╔═╝║║╚═╣╚╝║─║║╔╝║\n"
+                               + "╚══╝╚══╩══╝─╚╝╚═╝\n"
+                               + "────╔═╗\n"
+                               + "╔═══╬╗║\n"
+                               + "╚═══╝║║\n"
+                               + "╔═══╗║║\n"
+                               + "╚═══╬╝║\n"
+                               + "────╚═╝");
+
+    }
+
+    /** @exception java.lang.NullPointerException  */
+    private void setTitle(){
+        if (openedPath!=null){
+            Main.getPrimaryStage().setTitle(openedPath.getFileName().toString());
+        }
+        else{
+            Main.getPrimaryStage().setTitle("New file");
+        }
+    }
+
 
 }
 
-//{Label secondLabel = new Label("I'm a Label on new Window");
-//    StackPane secondaryLayout = new StackPane();
-//        secondaryLayout.getChildren().add(secondLabel);
-//                Scene secondScene = new Scene(secondaryLayout, 230, 100);
-//
-//                // New window (Stage)
-//                Stage newWindow = new Stage();
-//                newWindow.setTitle("Second Stage");
-//                newWindow.setScene(secondScene);
-//
-//                // Set position of second window, related to primary window.
-//
-//                newWindow.show();}
